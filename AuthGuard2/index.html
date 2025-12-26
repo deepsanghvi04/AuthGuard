@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AuthGuard - Home</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-left">
+    <div class="profile-circle" id="userCircle">U</div>
+    <span class="site-name">AuthGuard</span>
+  </div>
+  <div class="nav-right">
+    <a href="#features">Features</a>
+    <a href="#security">Security</a>
+    <a href="analytics.html">Analytics</a>
+    <a href="profile.html">Profile</a>
+    <a href="#contact">Contact</a>
+    <a href="login.html" id="logoutLink">Logout</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-content">
+    <h1>Identity <span>Beyond</span> Passwords.</h1>
+    <p>Continuous AI‑powered behavioral authentication</p>
+
+    <div class="stats">
+      <div><b id="statFraud">0%</b><span>Fraud Score</span></div>
+      <div><b id="statStatus">Waiting</b><span>Status</span></div>
+      <div><b>24/7</b><span>Monitoring</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="image-section">
+  <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c" alt="security">
+</section>
+
+<section class="keystroke" id="features">
+  <h2>Live Behavior Monitoring</h2>
+
+  <div class="keystroke-grid">
+    <div class="card">
+      <h3>Typing</h3>
+      <input id="typing" placeholder="Start typing here..." autocomplete="off">
+      <div class="hint">Typing metrics: flight, dwell, WPM/CPM</div>
+      <div class="metrics" style="margin-top:8px;">
+        <div>Flight<br><b id="flight">0 ms</b></div>
+        <div>Dwell<br><b id="dwell">0 ms</b></div>
+        <div>WPM<br><b id="wpm">0</b></div>
+        <div>CPM<br><b id="cpm">0</b></div>
+      </div>
+
+      <div style="margin-top:12px;">
+        <h4 class="small">Typing Speed (last 60s)</h4>
+        <div class="chart-wrap" style="height:120px;"><canvas id="typingChart"></canvas></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Mouse & Scroll</h3>
+      <div class="chart-wrap" style="height:120px;"><canvas id="mouseChart"></canvas></div>
+
+      <div class="metrics" style="margin-top:8px;">
+        <div>Mouse Avg<br><b id="mouseAvg">0 px/s</b></div>
+        <div>Clicks<br><b id="clicks">0</b></div>
+        <div>Scroll Speed<br><b id="scrollSpeed">0 px/s</b></div>
+        <div>Scrolls<br><b id="scrolls">0</b></div>
+      </div>
+
+      <div style="margin-top:12px;">
+        <h4 class="small">Scroll Speed Timeline</h4>
+        <div class="chart-wrap" style="height:100px;"><canvas id="scrollChart"></canvas></div>
+      </div>
+
+      <div style="margin-top:12px;">
+        <h4 class="small">Click Heatmap</h4>
+        <canvas id="mouseHeatmap"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:18px;" class="card">
+    <h3>Session Analysis</h3>
+    <div id="analysisArea" class="small">We'll analyze behavior after initial detection and continuously update status.</div>
+    <div style="margin-top:10px;">
+      <button class="btn" id="startBaseline">Collect Baseline (10s)</button>
+      <span class="hint" id="baselineHint">Baseline not collected</span>
+    </div>
+  </div>
+</section>
+
+<section class="image-section">
+  <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3" alt="cyber">
+</section>
+
+<section class="solution" id="security">
+  <h2>Advanced <span>Security Layer</span></h2>
+  <div class="three">
+    <div class="box">Keystroke Dynamics</div>
+    <div class="box">Mouse & Touch Path Analysis</div>
+    <div class="box">Scroll Pattern Detection</div>
+  </div>
+</section>
+
+<footer id="contact">
+  <p>© 2025 AuthGuard. All Rights Reserved.</p>
+  <div class="socials">
+    <a href="#">LinkedIn</a>
+    <a href="#">GitHub</a>
+    <a href="#">Twitter</a>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+  // ensure user is authenticated (simple sessionStorage)
+  const user = sessionStorage.getItem('authguard_user');
+  if (!user) {
+    alert('Please login first');
+    window.location.href = 'login.html';
+  } else {
+    document.getElementById('userCircle').innerText = user[0].toUpperCase();
+    document.getElementById('logoutLink').addEventListener('click', () => {
+      sessionStorage.clear();
+    });
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Admin | AuthGuard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-left">
+    <div class="profile-circle">A</div>
+    <span class="site-name">AuthGuard Admin</span>
+  </div>
+  <div class="nav-right">
+    <a href="index.html">Site</a>
+    <a href="login.html">Logout</a>
+  </div>
+</nav>
+
+<section class="admin">
+  <h2>User Monitoring Dashboard</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>User</th>
+        <th>Typing (flight/dwell)</th>
+        <th>Mouse Avg</th>
+        <th>Touch Avg</th>
+        <th>Scroll (px/s)</th>
+        <th>Clicks</th>
+        <th>Fraud %</th>
+        <th>Risk</th>
+        <th>Status</th>
+        <th>Last Update</th>
+      </tr>
+    </thead>
+    <tbody id="userData"></tbody>
+  </table>
+</section>
+
+<script>
+async function loadData(){
+  try{
+    const res = await fetch('http://127.0.0.1:5000/admin');
+    const data = await res.json();
+    let rows = '';
+    for (const u in data) {
+      const e = data[u];
+      const last = (e.history && e.history.length) ? e.history[e.history.length-1] : {};
+      const f = e.fraud || 0;
+      const risk = f < 40 ? 'Low' : f < 70 ? 'Medium' : 'High';
+      const statusClass = e.status && e.status.includes('Locked') ? 'danger' : (e.status && e.status.includes('Fraud') ? 'danger' : 'safe');
+      rows += `<tr>
+        <td>${u}</td>
+        <td>${e.profile?.flight_mean ?? last.flight ?? '-'} / ${e.profile?.dwell_mean ?? last.dwell ?? '-'}</td>
+        <td>${e.profile?.mouse_mean ?? last.mouse_speed ?? '-'}</td>
+        <td>${e.profile?.touch_mean ?? last.touch_speed ?? '-'}</td>
+        <td>${last.scroll_speed ?? e.profile?.scroll_speed ?? '-'}</td>
+        <td>${last.clicks ?? '-'}</td>
+        <td>${f}%</td>
+        <td>${risk}</td>
+        <td class="${statusClass}">${e.status ?? '-'}</td>
+        <td>${e.last_update ? new Date(e.last_update).toLocaleString() : '-'}</td>
+      </tr>`;
+    }
+    document.getElementById('userData').innerHTML = rows;
+  }catch(err){ console.error(err); }
+}
+loadData();
+setInterval(loadData, 5000);
+</script>
+</body>
+</html>
